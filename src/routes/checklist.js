@@ -1,5 +1,5 @@
-const express = require('express');
-const router = express.Router();
+const { Router } = require('express');
+const router = Router();
 
 router.get('/:id?', (req, res) => {
     if (req.params.id) {
