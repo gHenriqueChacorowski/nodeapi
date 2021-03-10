@@ -1,23 +1,50 @@
 const { Router } = require('express');
 const router = Router();
+const controller = require('../controller/nota')
 
-router.get('/:id?', (req, res) => {
-    if (req.params.id) {
-        res.send("Listagem de notas");
-    }
-    res.send("Listagem de nota"); 
+router.get('/:id?', async (req, res) => {
+  const { id } = req.params;
+
+  const nota = await controller.getNotas(id);
+
+  res.send(nota || []);
 });
 
-router.post('/', (req, res) => {
-    res.send("Nota criada");
+router.post('/', async (req, res) => {
+  try {
+    const { body } = req;
+
+    const nota = await controller.save(body);
+
+    res.send(nota);
+  } catch (err) {
+    res.status(500).send({ err });
+  }
 });
 
-router.delete('/:id', (req, res) => {
-    res.send("Nota deletada");
+router.put('/:id', async (req, res) => {
+  try {
+    const { body } = req;
+    const { id } = req.params;
+
+    const nota = await controller.edit(id, body);
+
+    res.send(nota);
+  } catch (err) {
+    res.status(500).send({ err });
+  }
 });
 
-router.put('/:id', (req, res) => {
-    res.send("Nota atualizada");
+router.delete('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await controller.remove(id);
+
+    res.send({ id });
+  } catch (err) {
+    res.status(500).send({ err })
+  }
 });
 
 module.exports = router;
