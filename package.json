@@ -4,10 +4,13 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "serverdev": "cross-env NODE_ENV=development nodemon index.js",
+    "serverprod": "cross-env NODE_ENV=production nodemon index.js",
     "start": "nodemon index.js"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
+    "cross-env": "^7.0.3",
     "express": "^4.17.1",
     "pg": "^8.5.1",
     "pg-hstore": "^2.3.3",

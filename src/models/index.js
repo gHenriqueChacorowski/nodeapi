@@ -1,16 +1,15 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const _Usuario = require('./usuario');
-const _Nota = require('./nota');
-const _Tag = require('./tag');
-const _Checklist = require('./checklist');
-const database = {};
+let { NODE_ENV } = process.env;
+let options = require('../config/database');
+var _Usuario = require('./usuario');
+var _Nota = require('./nota');
+var _Tag = require('./tag');
+var _Checklist = require('./checklist');
+let database = {};
 
-const options = {
-  username: 'postgres',
-  password: 'postgres',
-  host: 'localhost',
-  dialect: 'postgres',
-};
+NODE_ENV = NODE_ENV || 'production';
+
+options = options[NODE_ENV];
 
 const sequelize = new Sequelize(options);
 
@@ -30,7 +29,7 @@ for (const key in database) {
 
 sequelize
   .authenticate()
-  .then(() => console.log(`Conexão com o banco ${options.database} realizada com sucesso`))
+  .then(() => console.log(`Conexão com o banco ${options.database} no ambiente ${NODE_ENV} realizada com sucesso`))
   .catch(err => console.log(`Falha ao conectar ao banco ${options.database}: ${err}`));
 
 database.sequelize = sequelize;
