@@ -1,9 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const usuario = require('./src/routes/usuario.js');
-const nota = require('./src/routes/nota.js');
-const checklist = require('./src/routes/checklist.js');
-const tag = require('./src/routes/tag.js');
+const usuario = require('./src/routes/usuario');
+const nota = require('./src/routes/nota');
+const checklist = require('./src/routes/checklist');
+const tag = require('./src/routes/tag');
+const login = require('./src/routes/login');
+const auth = require('./src/middlewares/auth');
 const fs = require('fs');
 const https = require('https');
 const app = express();
@@ -19,6 +21,8 @@ const portHttps = 443;
 
 app.use(bodyParser.json());
 
+app.use('/login', login);
+app.use(auth);
 app.use('/usuario', usuario);
 app.use('/nota', nota);
 app.use('/checklist', checklist);
