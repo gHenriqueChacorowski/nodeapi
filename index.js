@@ -6,6 +6,7 @@ const checklist = require('./src/routes/checklist');
 const tag = require('./src/routes/tag');
 const login = require('./src/routes/login');
 const auth = require('./src/middlewares/auth');
+const morgan = require('morgan');
 const fs = require('fs');
 const https = require('https');
 const app = express();
@@ -18,7 +19,7 @@ const portHttps = 443;
 //     origin: ['https://localhost:8080']
 //   })
 // );
-
+app.use(morgan('dev'));
 app.use(bodyParser.json());
 
 app.use('/login', login);
