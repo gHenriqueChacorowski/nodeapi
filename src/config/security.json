@@ -1,3 +1,4 @@
 {
-  "secret": "@Integrado123!"
+  "secret": "@Integrado123!",
+  "saltRounds": 10
 }
