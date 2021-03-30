@@ -44,6 +44,8 @@ module.exports = (sequelize, DataTypes) => {
     this.belongsTo(models.Usuario, {
       foreignKey: 'usuarioId',
     });
+    this.hasMany(models.Checklist, { as: 'checklists', foreignKey: 'notaId' });
+    this.hasMany(models.Tag, { as: 'tags', foreignKey: 'notaId' });
   };
 
   return Nota;
