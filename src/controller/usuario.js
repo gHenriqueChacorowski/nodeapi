@@ -64,21 +64,25 @@ controller.edit = async (id, { nome, email, avatar = null, notas = []}) => {
           where: { id, usuarioId }
         })
 
-        nota.checklists.forEach(checklist => {
-          let { id, descricao, notaId } = checklist;
-
-          const checklistEditado = Checklist.update({ descricao }, {
-            where: { id, notaId }
+        if (nota.checklists) {
+          nota.checklists.forEach(checklist => {
+            let { id, descricao, notaId } = checklist;
+  
+            const checklistEditado = Checklist.update({ descricao }, {
+              where: { id, notaId }
+            })
           })
-        })
+        }
 
-        nota.tags.forEach(tag => {
-          let { id, nome, notaId } = tag;
-
-          const tagEditada = Tag.update({ nome }, {
-            where: { id, notaId }
-          })
-        })
+        if (nota.tags) {
+          nota.tags.forEach(tag => {
+            let { id, nome, notaId } = tag;
+  
+            const tagEditada = Tag.update({ nome }, {
+              where: { id, notaId }
+            })
+          })  
+        }
       }); 
     }
 
