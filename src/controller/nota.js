@@ -94,7 +94,6 @@ controller.save = async ({ usuarioId, titulo = null, descricao = null, checklist
         checklistsSalvos = [ ...checklistsSalvos, checklistSalvo ];
       };
     }
-    console.log(checklistsSalvos);
 
     let tagsSalvas = [];
 

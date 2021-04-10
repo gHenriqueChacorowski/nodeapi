@@ -1,7 +1,10 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { Usuario } = require('../models');
+const { Usuario, Nota, Checklist, Tag, sequelize } = require('../models');
 const { secret } = require('../config/security');
+const usuario = require('../models/usuario');
+const tag = require('../models/tag');
+const nota = require('../models/nota');
 const controller = {};
 
 controller.login = async (email, senha) => {
@@ -20,28 +23,70 @@ controller.login = async (email, senha) => {
   }
 };
 
-controller.getUsuarios = async (id = null) => {
-  let result = [];
-    
-  if (id) {
-    result = await Usuario.findByPk(id);
-  } else {
-    result = await Usuario.findAll();
-  }
-
-  return result;
+controller.getUsuarios = async (id) => {
+  return await Usuario.findOne({
+    where: {
+      id
+    },
+    include: [
+      {
+        model: Nota,
+        include: [
+          {
+            model: Checklist,
+            as: 'checklists',
+          },
+          {
+            model: Tag,
+            as: 'tags',
+          }
+        ]
+      },
+    ]
+  });
 };
 
 controller.save = async (usuario) => {
   return await Usuario.create(usuario);
 };
 
-controller.edit = async (id, usuario) => {
-  await Usuario.update(usuario, {
-    where: { id }
-  });
+controller.edit = async (id, { nome, email, avatar = null, notas = []}) => {
+  try {
+    const usuarioEditado = await Usuario.update({nome, email, avatar}, {
+      where: { id }
+    })
 
-  return await controller.getUsuarios(id);
+    if (notas.length > 0 ) {
+      notas.forEach(nota => {
+        let { id, usuarioId, titulo, descricao } = nota;
+
+        const notaEditada = Nota.update({titulo, descricao}, {
+          where: { id, usuarioId }
+        })
+
+        nota.checklists.forEach(checklist => {
+          let { id, descricao, notaId } = checklist;
+
+          const checklistEditado = Checklist.update({ descricao }, {
+            where: { id, notaId }
+          })
+        })
+
+        nota.tags.forEach(tag => {
+          let { id, nome, notaId } = tag;
+
+          const tagEditada = Tag.update({ nome }, {
+            where: { id, notaId }
+          })
+        })
+      }); 
+    }
+
+    return await controller.getUsuarios(id);
+  } catch (err) {
+    console.log(err);
+    throw new Error(err);
+  };
 };
 
 controller.remove = async (id) => {

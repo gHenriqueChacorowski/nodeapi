@@ -29,7 +29,7 @@ router.put('/:id', async (req, res) => {
     const { body } = req;
     const { id } = req.params;
 
-    const usuario = await controllerDefault.edit(Usuario, body, id);
+    const usuario = await controller.edit(id, body);
 
     res.send(usuario);
   } catch (err) {
