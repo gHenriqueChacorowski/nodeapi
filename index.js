@@ -11,12 +11,16 @@ const morgan = require('morgan');
 // const https = require('https');
 const app = express();
 // const cors = require('cors');
-const port = 3000;
+const port = 4443;
 // const portHttps = 443;
 
 // app.use(
 //   cors({
-//     origin: ['https://localhost:8080']
+//     origin: [
+//       'https://localhost:8080',
+//       'http://localhost:3000',
+//       'http://localhost:4443'
+//     ]
 //   })
 // );
 app.use(morgan('dev'));

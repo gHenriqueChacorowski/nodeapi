@@ -1,15 +1,18 @@
 const { Router } = require('express');
+const jwt = require('jsonwebtoken');
 const router = Router();
 const { Usuario } = require('../models');
 const controller = require('../controller/usuario');
 const controllerDefault = require('../controller/default');
 
-router.get('/:id?', async (req, res) => {
-  const { id } = req.params;
+router.get('/', async (req, res) => {
+  const [type, token] = req.headers['authorization'].split(' ');
 
-  const usuarios = id ? await controllerDefault.getById(Usuario, id) : await controllerDefault.getAll(Usuario);
+  const { id } = jwt.decode(token);
 
-  res.send(usuarios || []);
+  const usuario = await controllerDefault.getById(Usuario, id);
+
+  res.send(usuario);
 });
 
 router.post('/', async (req, res) => {
