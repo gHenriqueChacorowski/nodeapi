@@ -1,25 +1,5 @@
-const { Usuario, Nota, Checklist, Tag, sequelize } = require('../models');
+const { Nota, Checklist, Tag, sequelize } = require('../models');
 const controller = {};
-
-controller.getNotas = async (id = null) => {
-  let result = [];
-
-  if (id) {
-    result = await Nota.findByPk(id, {
-      include: {
-        model: Usuario
-      }
-    });
-  } else {
-    result = await Nota.findAll({
-      include: {
-        model: Usuario
-      }
-    });
-  }
-
-  return result;
-};
 
 controller.getById = async (id) => {
   return await Nota.findOne({
@@ -119,22 +99,5 @@ controller.save = async ({ usuarioId, titulo = null, descricao = null, checklist
     await transaction.rollback();
   }
 };
-
-controller.edit = async (id, nota) => {
-  await Nota.update(nota, {
-    where: { id }
-  });
-
-  return await controller.getNotas(id);
-};
-
-controller.remove = async (id) => {
-  try {
-    return await Nota.destroy({ where: { id } });
-  } catch (err) {
-    console.log(err);
-    throw new Error(err);
-  }
-}
 
 module.exports = controller;

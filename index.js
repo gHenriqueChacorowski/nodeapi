@@ -1,49 +1,41 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const usuario = require('./src/routes/usuario');
-const nota = require('./src/routes/nota');
-const checklist = require('./src/routes/checklist');
-const tag = require('./src/routes/tag');
-const login = require('./src/routes/login');
-const auth = require('./src/middlewares/auth');
 const morgan = require('morgan');
+const app = express();
+const usuario = require('./routes/usuario');
+const nota = require('./routes/nota');
+const checklist = require('./routes/checklist');
+const tag = require('./routes/tag');
+const login = require('./routes/login');
+const auth = require('./middlewares/auth');
+const port = 4443;
 // const fs = require('fs');
 // const https = require('https');
-const app = express();
-// const cors = require('cors');
-const port = 4443;
-// const portHttps = 443;
+const cors = require('cors');
+// const portaHttps = 4443;
 
-// app.use(
-//   cors({
-//     origin: [
-//       'https://localhost:8080',
-//       'http://localhost:3000',
-//       'http://localhost:4443'
-//     ]
-//   })
-// );
-app.use(morgan('dev'));
+app.use(
+  cors({
+    origin: ['http://localhost:3000'],
+  })
+);
 app.use(bodyParser.json());
+app.use(morgan('dev'));
 
 app.use('/login', login);
 app.use(auth);
 app.use('/usuario', usuario);
-app.use('/nota', nota);
 app.use('/checklist', checklist);
 app.use('/tag', tag);
+app.use('/nota', nota);
 
-// const key = fs.readFileSync('src/certs/localhost-key.pem');
-// const cert = fs.readFileSync('src/certs/localhost.pem');
+// const key = fs.readFileSync('certs/localhost-key.pem');
+// const cert = fs.readFileSync('certs/localhost.pem');
 
 // const credentials = { key, cert };
 
 // const httpsServer = https.createServer(credentials, app);
 
-// httpsServer.listen(portHttps, () => {
-//   console.log(`API rodando seguramente na porta ${portHttps}`)
-// })
-
 app.listen(port, () => {
-  console.log(`Servidor rodando na porta ${port}`);
+  console.log(`API rodando seguramente na porta ${port}`);
 });
