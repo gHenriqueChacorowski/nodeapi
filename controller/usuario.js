@@ -9,7 +9,7 @@ controller.login = async (email, senha) => {
     const usuario = await Usuario.scope('login').findOne({ where: { email } });
     const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
 
-    if (senhaCorreta) return false;
+    if (!senhaCorreta) return false;
 
     return jwt.sign({ id: usuario.id }, secret, {
       expiresIn: '24h',

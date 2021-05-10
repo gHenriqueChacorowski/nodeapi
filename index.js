@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const app = express();
+const public = require ('./routes/public');
 const usuario = require('./routes/usuario');
 const nota = require('./routes/nota');
 const checklist = require('./routes/checklist');
@@ -22,6 +23,7 @@ app.use(
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 
+app.use('/usuario/new', public);
 app.use('/login', login);
 app.use(auth);
 app.use('/usuario', usuario);
