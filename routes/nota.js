@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const jwt = require('jsonwebtoken');
 const router = Router();
 const controller = require('../controller/default');
 const controllerNota = require('../controller/nota');
@@ -23,7 +24,11 @@ router.get('/usuario/:usuarioId', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    const { body } = req;
+    let { body, token } = req;
+
+    const { id } = jwt.decode(token);
+
+    body = { ...body, usuarioId: id };
 
     const nota = await controllerNota.save(body);
 
