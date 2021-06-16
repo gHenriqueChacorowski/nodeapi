@@ -1,9 +1,9 @@
 const { Router } = require('express');
-const jwt = require('jsonwebtoken');
 const router = Router();
 const controller = require('../controller/default');
 const controllerNota = require('../controller/nota');
 const { Nota } = require('../models');
+const jwt = require('jsonwebtoken');
 
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
@@ -40,13 +40,18 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   try {
-    const { body } = req;
+    let { body, token } = req;
     const { id } = req.params;
 
-    const nota = await controller.edit(Nota, body, id);
+    const decoded = jwt.decode(token);
+
+    body = { ...body, usuarioId: decoded.id };
+
+    const nota = await controllerNota.edit(body, id);
 
     res.send(nota);
   } catch (error) {
+    console.log(error);
     res.status(500).send({ error });
   }
 });

@@ -26,10 +26,10 @@ app.use(morgan('dev'));
 app.use('/usuario/new', public);
 app.use('/login', login);
 app.use(auth);
+app.use('/nota', nota);
 app.use('/usuario', usuario);
 app.use('/checklist', checklist);
 app.use('/tag', tag);
-app.use('/nota', nota);
 
 // const key = fs.readFileSync('certs/localhost-key.pem');
 // const cert = fs.readFileSync('certs/localhost.pem');
